@@ -1,0 +1,10 @@
+- task=HumanoidGPT
+- wandb_activate=False
+- wandb_entity=
+- wandb_project=
+- headless=True
+- capture_video=False
+- force_render=False
+- max_iterations=3000
+- checkpoint=/home/huangchangxin/cc_project/Eureka-main/eureka/outputs/eureka_bo/2024-07-27_13-56-31/policy-2024-07-27_15-38-38/runs/HumanoidGPT-2024-07-27_15-38-38/nn/HumanoidGPT.pth
+- fusion=0.51

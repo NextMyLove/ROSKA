@@ -1,0 +1,157 @@
+hydra:
+  output_subdir: .hydra
+  run:
+    dir: ./policy-${now:%Y-%m-%d}_${now:%H-%M-%S}
+  launcher:
+    cpus_per_task: 20
+    gpus_per_node: 2
+    tasks_per_node: 1
+    timeout_min: 600
+    mem_gb: 256
+    name: ${hydra.job.name}
+    _target_: hydra_plugins.hydra_submitit_launcher.submitit_launcher.LocalLauncher
+    submitit_folder: ${hydra.sweep.dir}/.submitit/%j
+  sweeper:
+    _target_: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
+    max_batch_size: null
+    params: null
+  help:
+    app_name: ${hydra.job.name}
+    header: '${hydra.help.app_name} is powered by Hydra.
+
+      '
+    footer: 'Powered by Hydra (https://hydra.cc)
+
+      Use --hydra-help to view Hydra specific help
+
+      '
+    template: '${hydra.help.header}
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (group=option)
+
+
+      $APP_CONFIG_GROUPS
+
+
+      == Config ==
+
+      Override anything in the config (foo.bar=value)
+
+
+      $CONFIG
+
+
+      ${hydra.help.footer}
+
+      '
+  hydra_help:
+    template: 'Hydra (${hydra.runtime.version})
+
+      See https://hydra.cc for more info.
+
+
+      == Flags ==
+
+      $FLAGS_HELP
+
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (For example, append hydra/job_logging=disabled
+      to command line)
+
+
+      $HYDRA_CONFIG_GROUPS
+
+
+      Use ''--cfg hydra'' to Show the Hydra config.
+
+      '
+    hydra_help: ???
+  hydra_logging:
+    version: 1
+    formatters:
+      simple:
+        format: '[%(asctime)s][HYDRA] %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+    root:
+      level: INFO
+      handlers:
+      - console
+    loggers:
+      logging_example:
+        level: DEBUG
+    disable_existing_loggers: false
+  job_logging:
+    version: 1
+    root:
+      level: ERROR
+    disable_existing_loggers: true
+  env: {}
+  mode: RUN
+  searchpath: []
+  sweep:
+    dir: ???
+    subdir: ???
+  callbacks: {}
+  overrides:
+    hydra:
+    - hydra/output=subprocess
+    - hydra.mode=RUN
+    task:
+    - task=HumanoidGPT
+    - wandb_activate=False
+    - wandb_entity=
+    - wandb_project=
+    - headless=True
+    - capture_video=False
+    - force_render=False
+    - max_iterations=3000
+  job:
+    name: train
+    chdir: null
+    override_dirname: capture_video=False,force_render=False,headless=True,max_iterations=3000,task=HumanoidGPT,wandb_activate=False,wandb_entity=,wandb_project=
+    id: ???
+    num: ???
+    config_name: config
+    env_set: {}
+    env_copy: []
+    config:
+      override_dirname:
+        kv_sep: '='
+        item_sep: ','
+        exclude_keys: []
+  runtime:
+    version: 1.3.2
+    version_base: '1.1'
+    cwd: /home/huangchangxin/cc_project/Eureka-main/eureka/outputs/eureka_original_proxy/2024-08-15_23-32-16
+    config_sources:
+    - path: hydra.conf
+      schema: pkg
+      provider: hydra
+    - path: /home/huangchangxin/cc_project/Eureka-main/isaacgymenvs/isaacgymenvs/cfg
+      schema: file
+      provider: main
+    - path: ''
+      schema: structured
+      provider: schema
+    output_dir: /home/huangchangxin/cc_project/Eureka-main/eureka/outputs/eureka_original_proxy/2024-08-15_23-32-16/policy-2024-08-16_00-56-11
+    choices:
+      task: HumanoidGPT
+      train: HumanoidGPTPPO
+      hydra/env: default
+      hydra/callbacks: null
+      hydra/job_logging: disabled
+      hydra/hydra_logging: default
+      hydra/hydra_help: default
+      hydra/help: default
+      hydra/sweeper: basic
+      hydra/launcher: local
+      hydra/output: subprocess
+  verbose: false

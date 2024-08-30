@@ -1,0 +1,10 @@
+- task=AllegroHandGPT
+- wandb_activate=False
+- wandb_entity=
+- wandb_project=
+- headless=True
+- capture_video=False
+- force_render=False
+- max_iterations=3000
+- checkpoint=/root/autodl-tmp/changyanbin/Eureka-main/eureka/outputs/eureka_uniform/2024-08-09_12-31-01/policy-2024-08-09_12-32-43/runs/AllegroHandGPT-2024-08-09_12-32-44/nn/AllegroHandGPT.pth
+- fusion=0.6000000000000001

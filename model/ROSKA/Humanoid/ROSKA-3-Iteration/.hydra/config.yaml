@@ -1,0 +1,240 @@
+task_name: ${task.name}
+experiment: ''
+env_path: ''
+num_envs: ''
+seed: 1410
+torch_deterministic: false
+max_iterations: 3000
+physics_engine: physx
+pipeline: gpu
+sim_device: cuda:0
+rl_device: cuda:0
+graphics_device_id: 0
+num_threads: 4
+solver_type: 1
+num_subscenes: 4
+test: false
+checkpoint: /home/huangchangxin/cc_project/Eureka-main/eureka/outputs/eureka_bo/2024-07-27_13-56-31/policy-2024-07-27_17-24-18/runs/HumanoidGPT-2024-07-27_17-24-18/nn/HumanoidGPT.pth
+fusion: 0.6
+sigma: ''
+multi_gpu: false
+wandb_activate: false
+wandb_group: ''
+wandb_name: ${train.params.config.name}
+wandb_entity: ''
+wandb_project: ''
+wandb_tags: []
+wandb_logcode_dir: ''
+capture_video: false
+capture_video_freq: 5000
+capture_video_len: 200
+force_render: false
+headless: true
+task:
+  env:
+    actionsCost: 0.01
+    angularVelocityScale: 0.25
+    asset:
+      assetFileName: mjcf/nv_humanoid.xml
+    clipActions: 1.0
+    contactForceScale: 0.01
+    deathCost: -1.0
+    dofVelocityScale: 0.1
+    enableCameraSensors: false
+    enableDebugVis: true
+    energyCost: 0.05
+    envSpacing: 5
+    env_name: humanoidGPT
+    episodeLength: 1000
+    headingWeight: 0.5
+    jointsAtLimitCost: 0.25
+    numEnvs: ${resolve_default:4096,${...num_envs}}
+    plane:
+      dynamicFriction: 1.0
+      restitution: 0.0
+      staticFriction: 1.0
+    powerScale: 1.0
+    terminationHeight: 0.8
+    upWeight: 0.1
+  name: HumanoidGPT
+  physics_engine: ${..physics_engine}
+  sim:
+    dt: 0.0166
+    gravity:
+    - 0.0
+    - 0.0
+    - -9.81
+    physx:
+      bounce_threshold_velocity: 0.2
+      contact_collection: 0
+      contact_offset: 0.02
+      default_buffer_size_multiplier: 5.0
+      max_depenetration_velocity: 10.0
+      max_gpu_contact_pairs: 8388608
+      num_position_iterations: 4
+      num_subscenes: ${....num_subscenes}
+      num_threads: ${....num_threads}
+      num_velocity_iterations: 0
+      rest_offset: 0.0
+      solver_type: ${....solver_type}
+      use_gpu: ${contains:"cuda",${....sim_device}}
+    substeps: 2
+    up_axis: z
+    use_gpu_pipeline: ${eq:${...pipeline},"gpu"}
+  task:
+    randomization_params:
+      actions:
+        distribution: gaussian
+        operation: additive
+        range:
+        - 0.0
+        - 0.02
+      actor_params:
+        humanoid:
+          color: true
+          dof_properties:
+            damping:
+              distribution: uniform
+              operation: scaling
+              range:
+              - 0.5
+              - 1.5
+              schedule: linear
+              schedule_steps: 3000
+            lower:
+              distribution: gaussian
+              operation: additive
+              range:
+              - 0
+              - 0.01
+              schedule: linear
+              schedule_steps: 3000
+            stiffness:
+              distribution: uniform
+              operation: scaling
+              range:
+              - 0.5
+              - 1.5
+              schedule: linear
+              schedule_steps: 3000
+            upper:
+              distribution: gaussian
+              operation: additive
+              range:
+              - 0
+              - 0.01
+              schedule: linear
+              schedule_steps: 3000
+          rigid_body_properties:
+            mass:
+              distribution: uniform
+              operation: scaling
+              range:
+              - 0.5
+              - 1.5
+              schedule: linear
+              schedule_steps: 3000
+              setup_only: true
+          rigid_shape_properties:
+            friction:
+              distribution: uniform
+              num_buckets: 500
+              operation: scaling
+              range:
+              - 0.7
+              - 1.3
+              schedule: linear
+              schedule_steps: 3000
+            restitution:
+              distribution: uniform
+              operation: scaling
+              range:
+              - 0.0
+              - 0.7
+              schedule: linear
+              schedule_steps: 3000
+      frequency: 600
+      observations:
+        distribution: gaussian
+        operation: additive
+        range:
+        - 0
+        - 0.002
+      sim_params:
+        gravity:
+          distribution: gaussian
+          operation: additive
+          range:
+          - 0
+          - 0.4
+          schedule: linear
+          schedule_steps: 3000
+    randomize: false
+train:
+  params:
+    algo:
+      name: a2c_continuous
+    config:
+      bounds_loss_coef: 0.0001
+      clip_value: true
+      critic_coef: 4
+      e_clip: 0.2
+      entropy_coef: 0.0
+      env_name: rlgpu
+      full_experiment_name: ${.name}
+      gamma: 0.99
+      grad_norm: 1.0
+      horizon_length: 32
+      kl_threshold: 0.008
+      learning_rate: 0.0005
+      lr_schedule: adaptive
+      max_epochs: ${resolve_default:1000,${....max_iterations}}
+      mini_epochs: 5
+      minibatch_size: 32768
+      mixed_precision: true
+      multi_gpu: ${....multi_gpu}
+      name: ${resolve_default:HumanoidGPT,${....experiment}}
+      normalize_advantage: true
+      normalize_input: true
+      normalize_value: true
+      num_actors: ${....task.env.numEnvs}
+      ppo: true
+      print_stats: true
+      reward_shaper:
+        scale_value: 0.01
+      save_best_after: 200
+      save_frequency: 100
+      score_to_win: 20000
+      seq_len: 4
+      tau: 0.95
+      truncate_grads: true
+      value_bootstrap: true
+    load_checkpoint: ${if:${...checkpoint},True,False}
+    load_path: ${...checkpoint}
+    model:
+      name: continuous_a2c_logstd
+    network:
+      mlp:
+        activation: elu
+        d2rl: false
+        initializer:
+          name: default
+        regularizer:
+          name: None
+        units:
+        - 400
+        - 200
+        - 100
+      name: actor_critic
+      separate: false
+      space:
+        continuous:
+          fixed_sigma: true
+          mu_activation: None
+          mu_init:
+            name: default
+          sigma_activation: None
+          sigma_init:
+            name: const_initializer
+            val: 0
+    seed: ${...seed}
