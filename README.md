@@ -37,23 +37,9 @@ The evolution of these models demonstrates the robustness and efficiency of ROSK
 
 ## Running Experiments
 
-To train or evaluate a policy using the ROSKA algorithm in the Isaac Gym environment, follow these steps:
+To evaluate a policy in the Isaac Gym environment, follow these steps:
 
-1. **Training a Policy:**
-   - Start training with a specific task:
-     ```bash
-     python train.py task=Cartpole
-     ```
-   - For locomotion tasks like Ant, use:
-     ```bash
-     python train.py task=Ant
-     ```
-   - For headless training (without rendering), execute:
-     ```bash
-     python train.py task=Ant headless=True
-     ```
-
-2. **Loading Trained Models:**
+1. **Loading Trained Models:**
    - To continue training from a checkpoint:
      ```bash
      python train.py task=Ant checkpoint=runs/Ant/nn/Ant.pth
