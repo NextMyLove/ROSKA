@@ -2,7 +2,7 @@
 
 ## About this Repository
 
-This repository is dedicated to implementing and testing the ROSKA algorithm (**R**eward-**O**ptimization-**S**imulation-based **K**inematic **A**daptation) for sim-to-real transfer in robotic tasks. The ROSKA algorithm, introduced in the paper **"Efficient Language-instructed Skill Acquisition via Reward-Policy Co-Evolution,"** enhances the transferability of robotic learning models from simulation to real-world environments by evolving both reward functions and policies simultaneously.
+ROSKA(**RO**bot **SK**ill **A**cquisition) is an advanced reinforcement learning framework designed to improve the efficiency and effectiveness of robotic skill acquisition. The core idea of ROSKA is to enable simultaneous evolution of reward functions and policies, allowing for more dynamic and adaptive learning processes in robotic tasks.
 
 The repository includes:
 
@@ -26,10 +26,6 @@ To begin, you need to install the Isaac Gym environment and other necessary depe
      ```bash
      pip install -e .
      ```
-
-## ROSKA Algorithm Overview
-
-ROSKA is designed to optimize the process of transferring learned policies from simulation to reality by evolving reward functions and policies in tandem. This method addresses the limitations of traditional reinforcement learning frameworks, which often struggle with discrepancies between simulated and real-world environments.
 
 ### Model Folder Structure
 
